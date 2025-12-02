@@ -1,0 +1,15 @@
+{
+  "name": "oto-ban-bot",
+  "version": "1.0.2",
+  "description": "Discord oto-ban botu (sadece ilgili sunucuda işlem yapar)",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "deploy": "node deploy-commands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.4.0"
+  }
+}
