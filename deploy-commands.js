@@ -1,6 +1,7 @@
 import { REST, Routes } from "discord.js";
 import dotenv from "dotenv";
 import fs from "fs";
+
 dotenv.config();
 
 const commands = [];
@@ -8,6 +9,10 @@ const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith("
 
 for (const file of commandFiles) {
   const command = await import(`./commands/${file}`);
+  if (!command.data) {
+    console.log(`⚠️ ${file} komutunda data export bulunamadı, atlanıyor.`);
+    continue;
+  }
   commands.push(command.data.toJSON());
 }
 
@@ -15,11 +20,13 @@ const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
 
 try {
   console.log("⏳ Slash komutları yükleniyor...");
+
   await rest.put(
-    Routes.applicationCommands(process.env.CLIENT_ID),
+    Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
     { body: commands }
   );
+
   console.log("✅ Slash komutları başarıyla yüklendi!");
 } catch (error) {
-  console.error(error);
+  console.error("❌ Hata:", error);
 }
